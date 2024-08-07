@@ -34,4 +34,4 @@ Public release of model weights is pending legal approval.
 Internal users can access relevant weights at `/data/lux70/data/cheap`.
 
 # Contact
-amyxlu [at] berkeley [dot] edu
+amyxlu [at] berkeley [dot] edu OR lux70 [at] gene [dot] com
