@@ -1,0 +1,27 @@
+# @package _global_
+
+use_compresson_callback: True
+
+defaults:
+  - override /datamodule: pfam_fasta
+
+datamodule:
+  batch_size: 64 
+  seq_len: 512 
+  num_workers: 4
+
+logger:
+  name: "pfam-fsq"
+
+hourglass:
+  use_quantizer: "fsq"
+  fsq_levels: [8,8,8,6,5]
+  lr: 1e-4
+  lr_num_warmup_steps: 3000
+  lr_sched_type: "cosine_with_restarts"
+  lr_num_training_steps: 800_000
+  lr_num_cycles: 2
+  depth: 6
+
+callbacks/compression:
+  run_every_n_steps: 5000

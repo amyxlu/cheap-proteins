@@ -1,0 +1,10 @@
+defaults:
+  - _self_
+  - paths: pcluster 
+  - datamodule: pfam_fasta
+  - hourglass: base 
+  - experiment: null
+
+dryrun: False 
+run_test: null
+resume_from_model_id: null

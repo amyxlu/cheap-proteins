@@ -1,0 +1,9 @@
+_target_: cheap.datasets.FastaDataModule
+
+
+# full dataset: 52,786,549
+fasta_file: ${paths.data_dir}/pfam/Pfam-A.fasta
+train_frac: 0.999
+batch_size: 64 
+num_workers: 4
+seq_len: 512

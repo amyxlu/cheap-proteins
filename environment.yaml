@@ -1,0 +1,19 @@
+name: cheap 
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - bioconda
+  - salilab
+dependencies:
+  - python==3.10
+  - pip
+  - gxx_linux-64>=9,<=12
+  - ninja
+  - pytorch
+  - pytorch-cuda=12.1
+  - torchvision
+  - bioconda::tmalign
+  - salilab::dssp
+  - pip:
+    - -r requirements.txt

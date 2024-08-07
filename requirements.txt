@@ -1,0 +1,34 @@
+wandb
+biopython
+hydra-core >= 1.3
+seaborn
+pandas
+transformers
+lightning
+einops
+tqdm
+numba
+git+https://github.com/facebookresearch/esm.git@d7b3331f41442ed4ffde70cb95bdd48cabcec2e9
+dm-tree
+modelcif
+ml_collections
+omegaconf
+h5py
+lmdb
+safetensors
+git+https://github.com/amyxlu/evo.git
+scipy
+scikit-learn
+py3Dmol
+pyarrow  # for pandas dataframe
+plotly   # to log wandb plots
+jupyter
+ninja
+biotite
+git+https://github.com/webdataset/webdataset.git@5b12e0ba78bfb64741add2533c5d1e4cf088ffff
+
+# for openfold, use this hack to get around clunky imports while
+# making sure the custom CUDA kernels used are being created: 
+# git clone github.com/amyxlu/openfold.git ~/openfold
+# cd ~/openfold
+# python setup.py develop

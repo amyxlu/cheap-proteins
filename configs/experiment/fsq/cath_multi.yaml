@@ -1,0 +1,33 @@
+# @package _global_
+
+use_compresson_callback: false
+
+defaults:
+  - _self_
+  - override /trainer: ddp
+  - override /datamodule: seqrep_cached/cath_h5
+  - override /hourglass: large
+
+datamodule:
+  batch_size: 128 
+  seq_len: 512 
+  num_workers: 4 
+
+logger:
+  name: "cath-fsq-large"
+
+hourglass:
+  log_sequence_loss: false
+  log_structure_loss: false
+  use_quantizer: "fsq"
+  fsq_levels: [8,8,8,6,5]
+  shorten_factor: 1 
+  
+  lr: 8e-5
+  lr_num_warmup_steps: 3000
+  lr_sched_type: "cosine_with_restarts"
+  lr_num_training_steps: 1_000_000
+  lr_num_cycles: 2
+
+callbacks/checkpoint:
+  every_n_train_steps: 20000

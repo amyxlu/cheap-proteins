@@ -1,0 +1,32 @@
+# @package _global_
+
+# make sure that 1024 / downproj_factor = e_dim
+defaults:
+  - override /datamodule: seqrep_cached/uniref_subset_sharded
+  - _self_
+  # - override /datamodule: cath_h5
+
+datamodule:
+  batch_size: 128 
+  seq_len: 512 
+  num_workers: 4 
+
+logger:
+  name: "fsq"
+  tags: "fsq"
+
+hourglass:
+  n_e: 128 
+  e_dim: 64
+  use_quantizer: "fsq"
+  fsq_levels: [8,8,8,8,8,8]
+  downproj_factor: 128 
+  lr: 3e-5
+  lr_num_warmup_steps: 5000
+  lr_sched_type: "constant_with_warmup"
+
+trainer:
+  precision: "bf16-mixed"
+  log_every_n_steps: 20
+  gradient_clip_val: 0.5
+  num_sanity_val_steps: 0

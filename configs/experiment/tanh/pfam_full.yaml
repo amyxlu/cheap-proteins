@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - override /datamodule: pfam_fasta
+  - _self_
+
+datamodule:
+  batch_size: 64 
+  seq_len: 512 
+  num_workers: 2
+
+logger:
+  name: "pfam-tanh"
+
+hourglass:
+  n_e: 128 
+  e_dim: 64
+  use_quantizer: "tanh"
+  fsq_levels: None
+  downproj_factor: 32
+  shorten_factor: 1 
+  lr: 8e-5
+  lr_num_warmup_steps: 6000
+  lr_sched_type: "cosine_with_restarts"
+  lr_num_training_steps: 800_000
+  lr_num_cycles: 2
+
+trainer:
+  precision: "bf16-mixed"
+  log_every_n_steps: 30
+  gradient_clip_val: 0.5
+  num_sanity_val_steps: 0
+  val_check_interval: 5000
+
+callbacks/compression:
+  run_every_n_steps: 5000

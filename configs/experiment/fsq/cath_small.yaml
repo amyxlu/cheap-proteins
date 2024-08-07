@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - override /datamodule: seqrep_cached/cath_h5
+  - _self_
+
+datamodule:
+  batch_size: 128 
+  seq_len: 512 
+  num_workers: 4 
+
+logger:
+  name: "cath-fsq"
+
+hourglass:
+  n_e: 128 
+  e_dim: 64
+  use_quantizer: "fsq"
+  fsq_levels: [8,8,8,6,5]
+  downproj_factor: 4 
+  shorten_factor: 1
+  
+  lr: 8e-5
+  lr_num_warmup_steps: 3000
+  lr_sched_type: "cosine_with_restarts"
+  lr_num_training_steps: 1_000_000
+  lr_num_cycles: 2

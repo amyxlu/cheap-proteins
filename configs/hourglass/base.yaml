@@ -1,0 +1,17 @@
+_target_: cheap.model.HourglassProteinCompressionTransformer 
+
+dim: 1024
+depth: [4, 2, 4]
+shorten_factor: 1 
+downproj_factor: 1
+attn_resampling: true
+updown_sample_type: 'linear'
+heads: 8
+dim_head: 64
+causal: false
+norm_out: false 
+
+seq_loss_weight: 0.0
+struct_loss_weight: 0.0
+log_sequence_loss: False
+log_structure_loss: False
