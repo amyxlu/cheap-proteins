@@ -23,6 +23,12 @@ cd openfold
 python setup.py develop
 ```
 
+Alternatively, you can install OpenFold with:
+
+```
+pip install -q git+https://github.com/asarigun/openfold.git
+```
+
 (PRs to improve this hacky workaround is welcomed!)
 
 
