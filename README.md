@@ -37,5 +37,19 @@ Alternatively, one can update the `DEFAULT_CACHE` variable in `constants.py` to 
 Public release of model weights is pending legal approval.
 Internal users can access relevant weights at `/data/lux70/data/cheap`.
 
-# Contact
-amyxlu [at] berkeley [dot] edu OR lux70 [at] gene [dot] com
+# Citation
+
+If this code is useful in your work, please use the citation:
+
+```
+@article{lu2024tokenized,
+  title={Tokenized and Continuous Embedding Compressions of Protein Sequence and Structure},
+  author={Lu, Amy X and Yan, Wilson and Yang, Kevin K and Gligorijevic, Vladimir and Cho, Kyunghyun and Abbeel, Pieter and Bonneau, Richard and Frey, Nathan},
+  journal={bioRxiv},
+  pages={2024--08},
+  year={2024},
+  publisher={Cold Spring Harbor Laboratory}
+}
+```
+
+Contact: amyxlu [at] berkeley [dot] edu OR lux70 [at] gene [dot] com.
