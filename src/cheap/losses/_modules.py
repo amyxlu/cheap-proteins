@@ -6,7 +6,7 @@ import torch
 import wandb
 
 from . import masked_token_cross_entropy_loss, masked_token_accuracy
-from ..esmfold.misc import batch_encode_sequences
+from ..esmfold._misc import batch_encode_sequences
 from ..proteins import LatentToSequence, LatentToStructure
 from ..utils import outputs_to_avg_metric
 

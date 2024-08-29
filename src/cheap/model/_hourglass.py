@@ -13,7 +13,7 @@ from ..utils import (
     get_lr_scheduler,
     get_model_device,
 )
-from ..esmfold.misc import batch_encode_sequences
+from ..esmfold._misc import batch_encode_sequences
 from ..proteins import LatentToSequence, LatentToStructure
 from ..losses import SequenceAuxiliaryLoss, BackboneAuxiliaryLoss, masked_mse_loss
 
@@ -179,7 +179,7 @@ class HourglassProteinCompressionTransformer(nn.Module):
     def check_valid_compression_method(self, method):
         return method in ["fsq", "vq", "tanh", None]
 
-    def forward(self, x, mask=None, verbose=False, infer_only=True, *args, **kwargs):
+    def encode(self, x, mask=None, verbose=False, infer_only=True, *args, **kwargs):
         if mask is None:
             mask = torch.ones((x.shape[0], x.shape[1])).to(x.device)
 
@@ -226,7 +226,6 @@ class HourglassProteinCompressionTransformer(nn.Module):
 
         elif self.quantize_scheme == "fsq":
             z_q = self.quantizer.quantize(z_e)
-            vq_loss = 0
             compressed_representation = self.quantizer.codes_to_indexes(
                 z_q
             ).detach()  # .cpu().numpy()
@@ -236,28 +235,43 @@ class HourglassProteinCompressionTransformer(nn.Module):
         elif self.quantize_scheme == "tanh":
             z_e = z_e.to(torch.promote_types(z_e.dtype, torch.float32))
             z_q = torch.tanh(z_e)
-            compressed_representation = z_q.detach()  # .cpu().numpy()
-            vq_loss = 0
+        
         else:
             raise NotImplementedError
 
-        ##################
-        # Return if infer_only / decode for training
-        ##################
-
         if infer_only:
+            compressed_representation = z_q.detach()  # .cpu().numpy()
+            downsampled_mask = downsampled_mask.detach()  # .cpu().numpy()
             return compressed_representation, downsampled_mask
+        else:
+            return z_q, downsampled_mask, log_dict
 
+    def decode(self, z_q, downsampled_mask=None, verbose=False):
         if self.post_quant_proj is not None:
             z_q = self.post_quant_proj(z_q)
 
         x_recons = self.dec(z_q, downsampled_mask, verbose)
-        recons_loss = masked_mse_loss(x_recons, x, mask)
-        loss = vq_loss + recons_loss
-        log_dict["recons_loss"] = recons_loss.item()
-        log_dict["loss"] = loss.item()
+        return x_recons
 
-        return x_recons, loss, log_dict, compressed_representation, downsampled_mask
+    def forward(self, x, mask=None, verbose=False, infer_only=True, *args, **kwargs):
+        if infer_only:
+            return self.encode(x, mask, verbose, infer_only)
+        
+        else:
+            # encode and obtain post-quantize embedding
+            z_q, downsampled_mask, log_dict = self.encode(x, mask, verbose, infer_only)
+
+            # decode back to original
+            x_recons = self.decode(z_q, downsampled_mask, verbose)
+
+            # calculate losses
+            recons_loss = masked_mse_loss(x_recons, x, mask)
+            vq_loss = log_dict.get("vq_loss", 0.0)
+            loss = vq_loss + recons_loss
+            log_dict["recons_loss"] = recons_loss.item()
+            log_dict["loss"] = loss.item()
+        
+            return x_recons, loss, log_dict, z_q, downsampled_mask
 
     def configure_optimizers(self):
         parameters = list(self.enc.parameters()) + list(self.dec.parameters())
