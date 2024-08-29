@@ -5,6 +5,7 @@ import torch
 
 from .esmfold import esmfold_v1_embed_only
 from .model import HourglassProteinCompressionTransformer
+from .pipeline import Pipeline
 from .constants import CATH_COMPRESS_LEVEL_TO_ID, CHECKPOINT_DIR_PATH
 from .typed import PathLike
 
@@ -51,163 +52,235 @@ def load_model_from_id(
     return model
 
 
-def CHEAP_shorten_1_dim_1024(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def get_pipeline(
+    model: HourglassProteinCompressionTransformer,
+    device: str = "cuda",
+):
+    esmfold_embed_only = esmfold_v1_embed_only()
+    return Pipeline(hourglass_model=model, esmfold_embed_only_module=esmfold_embed_only, device=device)
+
+
+def CHEAP_shorten_1_dim_1024(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=1024,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_512(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_512(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=512,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_256(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_256(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=256,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_128(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_128(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=128,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_64(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_64(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=64,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_32(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_32(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=32,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_16(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_16(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=16,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_8(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_8(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=8,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_1_dim_4(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_1_dim_4(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=1,
         channel_dimension=4,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_1024(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_1024(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=1024,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_512(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_512(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=512,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_256(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_256(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=256,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_128(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_128(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=128,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_64(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_64(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=64,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_32(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_32(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=32,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_16(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_16(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=16,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_8(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_8(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=8,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
 
 
-def CHEAP_shorten_2_dim_4(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH):
-    return load_pretrained_model(
+def CHEAP_shorten_2_dim_4(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_pretrained_model(
         shorten_factor=2,
         channel_dimension=4,
         infer_mode=infer_mode,
         model_dir=model_dir,
     )
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
+
+
+# A few 'special cases' compression models
+
+
+def CHEAP_pfam_shorten_2_dim_32(infer_mode=True, model_dir=CHECKPOINT_DIR_PATH, return_pipeline=True):
+    model = load_model_from_id("j1v1wv6w", infer_mode=infer_mode, model_dir=model_dir)
+    if return_pipeline:
+        return get_pipeline(model)
+    return model
