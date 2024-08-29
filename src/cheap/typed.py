@@ -5,3 +5,4 @@ import numpy as np
 
 ArrayLike = Union[np.ndarray, torch.Tensor, List]
 PathLike = Union[str, Path]
+DeviceLike = Union[str, torch.device]
