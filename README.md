@@ -8,6 +8,14 @@ Code for [Tokenized and Continuous Embedding Compressions of Protein Sequence an
 ## Demo
 For a demo of reported results, including phenomena of massive activations in [ESMFold (Lin et al.)](https://www.science.org/doi/10.1126/science.ade2574), see `notebooks/cheap_example.ipynb`.
 
+Code for [Tokenized and Continuous Embedding Compressions of Protein Sequence and Structure](https://www.biorxiv.org/content/10.1101/2024.08.06.606920v1).
+
+![Overview of the CHEAP model.](cheap.png)
+
+
+## Demo
+For a demo of reported results, including phenomena of massive activations in [ESMFold (Lin et al.)](https://www.science.org/doi/10.1126/science.ade2574), see `notebooks/cheap_example.ipynb`.
+
 ## Installation
 
 Clone the repository:
@@ -26,6 +34,9 @@ pip install -e .
 **Important**: we use the frozen ESMFold structure module, which in turn uses the OpenFold implementation, and includes custom CUDA kernels for the attention mechanism. To trigger the build without the other OpenFold dependencies related to MSA construction, etc.:
 
 ```
+# fork contains minor changes to setup.py to use C++17 instead of C++14
+# for newer versions of PyTorch
+git clone https://github.com/amyxlu/openfold.git
 # fork contains minor changes to setup.py to use C++17 instead of C++14
 # for newer versions of PyTorch
 git clone https://github.com/amyxlu/openfold.git
