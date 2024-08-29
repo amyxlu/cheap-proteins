@@ -2,6 +2,12 @@
 
 Code for [Tokenized and Continuous Embedding Compressions of Protein Sequence and Structure](https://www.biorxiv.org/content/10.1101/2024.08.06.606920v1).
 
+![Overview of the CHEAP model.](cheap.png)
+
+
+## Demo
+For a demo of reported results, including phenomena of massive activations in [ESMFold (Lin et al.)](https://www.science.org/doi/10.1126/science.ade2574), see `notebooks/cheap_example.ipynb`.
+
 ## Installation
 
 Clone the repository:
@@ -27,17 +33,43 @@ cd openfold
 python setup.py develop
 ```
 
-(PRs to improve this hacky workaround is welcomed!)
+## Usage
+
+To obtain compressed representations of sequences (also see notebook example at `notebooks/usage_example.ipynb`):
+
+```
+import torch
+device = torch.device("cuda")
+
+# replace with shorten factor and dimension of choice
+from cheap.pretrained import CHEAP_shorten_1_dim_64
+pipeline = CHEAP_shorten_1_dim_64(return_pipeline=True)
+
+# sample sequences
+# note: returned representation will be padded to the length of the longest sequence
+# consider cropping the sequences beforehand if memory is an issue.
+
+sequences = [
+    # >cath|current|12asA00/4-330
+    "AYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVVHSLAKWKRQTLGQHDFSAGEGLYTHMKALRPDEDRLSPLHSVYVDQWDWERVMGDGERQFSTLKSTVEAIWAGIKATEAAVSEEFGLAPFLPDQIHFVHSQELLSRYPDLDAKGRERAIAKDLGAVFLVGIGGKLSDGHRHDVRAPDYDDWSTPSELGHAGLNGDILVWNPVLEDAFELSSMGIRVDADTLKHQLALTGDEDRLELEWHQALLRGEMPQTIGGGIGQSRLTMLLLQLPHIGQVQAGVWPAAV",
+    # >cath|current|132lA00/2-129
+    "VFGRCELAAAMRHGLDNYRGYSLGNWVCAAFESNFNTQATNRNTDGSTDYGILQINSRWWCNDGRTPGSRNLCNIPCSALLSSDITASVNCAKIVSDGNGMNAWVAWRNRCGTDVQAWIRGCRL",
+    # >cath|current|153lA00/1-185
+    "RTDCYGNVNRIDTTGASCKTAKPEGLSYCGVSASKKIAERDLQAMDRYKTIIKKVGEKLCVEPAVIAGIISRESHAGKVLKNGWGDRGNGFGLMQVDKRSHKPQGTWNGEVHITQGTTILINFIKTIQKKFPSWTKDQQLKGGISAYNAGAGNVRSYARMDIGTTHDDYANDVVARAQYYKQHGY",
+]
+
+emb, mask = pipeline(sequences)
+```
 
 
-### Using the Weights
+
 Upon public release of model weights, the weights will be automatically downloaded to `~/.cache/cheap`.
 For now, the compression model weights, decoder model weights, and per-channel statistics for normalization must be manually placed in `~/.cache/cheap`.
 Alternatively, one can update the `DEFAULT_CACHE` variable in `constants.py` to where the weights are stored.
 Public release of model weights is pending legal approval.
 Internal users can access relevant weights at `/data/lux70/data/cheap`.
 
-# Citation
+## Citation
 
 If this code is useful in your work, please use the citation:
 
