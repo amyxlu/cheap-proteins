@@ -28,7 +28,13 @@ class Pipeline:
         self.device = device
         return self
     
+    def decode(self, x_compressed: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """Given a compressed representation, uncompress and unnormalize back to the original ESMFold latent."""
+        x_uncompressed = self.hourglass_model.decode(x_compressed, mask) 
+        return self.latent_scaler.unscale(x_uncompressed)
+    
     def __call__(self, sequences: Union[str, List[str]]) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Given the original ESMFold latent, normalize and compress using the loaded checkpoint."""
         res = self.esmfold_embed_only_module.infer_embedding(sequences)
         emb, mask = res['s'], res['mask']
         emb, mask = emb.to(self.device), mask.to(self.device)
