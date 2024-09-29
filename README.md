@@ -63,11 +63,13 @@ emb, mask = pipeline(sequences)
 
 
 
-Upon public release of model weights, the weights will be automatically downloaded to `~/.cache/cheap`.
+~Upon public release of model weights, the weights will be automatically downloaded to `~/.cache/cheap`.
 For now, the compression model weights, decoder model weights, and per-channel statistics for normalization must be manually placed in `~/.cache/cheap`.
 Alternatively, one can update the `DEFAULT_CACHE` variable in `constants.py` to where the weights are stored.
 Public release of model weights is pending legal approval.
-Internal users can access relevant weights at `/data/lux70/data/cheap`.
+Internal users can access relevant weights at `/data/lux70/data/cheap`.~
+
+**Sept 2024:** Weights are available here: https://huggingface.co/amyxlu/cheap-proteins/tree/main. Will get to making the weights easier to load in the next weeks, but in the meantime, the dedicated user can hack their way around this.
 
 ## Citation
 
