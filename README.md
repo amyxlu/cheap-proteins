@@ -8,14 +8,6 @@ Code for [Tokenized and Continuous Embedding Compressions of Protein Sequence an
 ## Demo
 For a demo of reported results, including phenomena of massive activations in [ESMFold (Lin et al.)](https://www.science.org/doi/10.1126/science.ade2574), see `notebooks/cheap_example.ipynb`.
 
-Code for [Tokenized and Continuous Embedding Compressions of Protein Sequence and Structure](https://www.biorxiv.org/content/10.1101/2024.08.06.606920v1).
-
-![Overview of the CHEAP model.](cheap.png)
-
-
-## Demo
-For a demo of reported results, including phenomena of massive activations in [ESMFold (Lin et al.)](https://www.science.org/doi/10.1126/science.ade2574), see `notebooks/cheap_example.ipynb`.
-
 ## Installation
 
 Clone the repository:
@@ -44,15 +36,20 @@ cd openfold
 python setup.py develop
 ```
 
-To use the model for inference, several cached tensors are needed as well as the model. By default, the files will be downloaded to `~/.cache/cheap`. However, since these files can be large, you can override by setting the `CHEAP_CACHE` environment variable:
+### Caching weights and auxiliary tensors
+To use the model for inference, several cached tensors are needed to normalize by channel and bypass massive activations explored in the paper. By default, the files will be downloaded to `~/.cache/cheap`. However, since these files can be large, you can override by setting the `CHEAP_CACHE` environment variable:
 
 ```
 echo "export CHEAP_CACHE=/data/lux70/cheap" >> ~/.bashrc
 ```
 
+You can also change where files are downloaded by modifying the variables in `src/plaid/constants.py`.
+
 ## Usage
 
-To obtain compressed representations of sequences (also see notebook example at `notebooks/usage_example.ipynb`):
+### Example
+
+To obtain compressed representations of sequences, you can use this example (also see notebook example at `notebooks/usage_example.ipynb`). **Model weights will be automatically downloaded to `~/.cache/cheap`, or `CHEAP_CACHE` if the environment variable is set.**
 
 ```
 import torch
@@ -78,15 +75,37 @@ sequences = [
 emb, mask = pipeline(sequences)
 ```
 
+### Available Models
+To assess the effects of gradual compression, the following models are available, all trained on [CATH](https://cathdb.info/). All can be imported from `cheap.pretrained`.
 
+* `CHEAP_shorten_1_dim_1024()`
+* `CHEAP_shorten_1_dim_512()`
+* `CHEAP_shorten_1_dim_256()`
+* `CHEAP_shorten_1_dim_128()`
+* `CHEAP_shorten_1_dim_64()`
+* `CHEAP_shorten_1_dim_32()`
+* `CHEAP_shorten_1_dim_16()`
+* `CHEAP_shorten_1_dim_8()`
+* `CHEAP_shorten_1_dim_4()`
+* `CHEAP_shorten_2_dim_1024()`
+* `CHEAP_shorten_2_dim_512()`
+* `CHEAP_shorten_2_dim_256()`
+* `CHEAP_shorten_2_dim_128()`
+* `CHEAP_shorten_2_dim_64()`
+* `CHEAP_shorten_2_dim_32()`
+* `CHEAP_shorten_2_dim_16()`
+* `CHEAP_shorten_2_dim_8()`
+* `CHEAP_shorten_2_dim_4()`
 
-~Upon public release of model weights, the weights will be automatically downloaded to `~/.cache/cheap`.
-For now, the compression model weights, decoder model weights, and per-channel statistics for normalization must be manually placed in `~/.cache/cheap`.
-Alternatively, one can update the `DEFAULT_CACHE` variable in `constants.py` to where the weights are stored.
-Public release of model weights is pending legal approval.
-Internal users can access relevant weights at `/data/lux70/data/cheap`.~
+Note that there is no model for `shorten_1_dim_1024`; this is equivalent to the original model ESMFold model. To obtain the embedding at the layer that we describe in the paper, you can use:
 
-**Sept 2024:** Weights are available here: https://huggingface.co/amyxlu/cheap-proteins/tree/main. Will get to making the weights easier to load in the next weeks, but in the meantime, the dedicated user can hack their way around this.
+```
+from cheap.esmfold import esmfold_v1_embed_only
+model = esmfold_v1_embed_only()  # does not include the structure module.
+```
+
+We also make available a model trained on Pfam:
+* `CHEAP_pfam_shorten_2_dim_32()`
 
 ## Citation
 
