@@ -1,3 +1,7 @@
+"""
+CHEAP model pipeline wrapper around ESMFold embedding, normalization module, and hourglass compression.
+"""
+
 from typing import Optional, Union, List, Tuple
 
 import torch

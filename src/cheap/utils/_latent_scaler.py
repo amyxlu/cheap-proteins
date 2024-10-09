@@ -4,9 +4,11 @@ import typing as T
 
 import numpy as np
 import torch
+from torch.hub import download_url_to_file
 
 from ._nn_utils import npy
-from ..constants import TENSOR_STATS_DIR
+from ..constants import TENSOR_STATS_DIR, HF_HUB_PREFIX
+from ..typed import PathLike
 
 
 ArrayLike = T.Union[np.ndarray, T.List[float], torch.Tensor]
@@ -28,10 +30,24 @@ GLOBAL_SEQEMB_STATS = {
 }
 
 
-def _get_npy_path(cache_dir, dataset="uniref", lm_embedder_type="esmfold"):
+def _ensure_exists(path):
+    path = Path(path)
+    if not path.exists():
+        path.mkdir(parents=True)
+
+
+def _download_normalization_tensors(channel_stat: str, cache_dir: PathLike, dataset: str = "cath", lm_embedder_type="esmfold"):
+    target_cache_dir = Path(cache_dir) / f"{dataset}/{lm_embedder_type}/subset_5000_nov28"
+    _ensure_exists(target_cache_dir)
+
+    url = f"{HF_HUB_PREFIX}/statistics/cath/esmfold/subset_5000_nov28/channel_{channel_stat}.pkl.npy"
+    download_url_to_file(url, target_cache_dir / f"channel_{channel_stat}.pkl.npy")
+
+
+def _get_npy_path(cache_dir, dataset="cath", lm_embedder_type="esmfold"):
+    """Constructs path to the npy file, downloading it if it doesn't exist."""
     assert dataset in ["uniref", "cath"]
-    cache_dir = Path(cache_dir)
-    # TODO: have a separate one for CATH
+
     paths = {
         "max": cache_dir
         / dataset
@@ -54,6 +70,11 @@ def _get_npy_path(cache_dir, dataset="uniref", lm_embedder_type="esmfold"):
         / "subset_5000_nov28"
         / "channel_std.pkl.npy",
     }
+
+    for channel_stat, path in paths.items():
+        if not path.exists():
+            _download_normalization_tensors(channel_stat, cache_dir, dataset, lm_embedder_type)
+
     return paths
 
 
@@ -256,3 +277,22 @@ class LatentScaler:
                 else:
                     raise NotImplementedError
             return x_scaled
+
+if __name__ == "__main__":
+    from cheap.pretrained import CHEAP_pfam_shorten_2_dim_32
+    from cheap.utils import LatentScaler
+    import numpy as np
+    import torch
+    device = torch.device("cuda")
+    pipeline = CHEAP_pfam_shorten_2_dim_32().to(device)
+
+    sequences = [
+        # >cath|current|12asA00/4-330
+        "AYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVVHSLAKWKRQTLGQHDFSAGEGLYTHMKALRPDEDRLSPLHSVYVDQWDWERVMGDGERQFSTLKSTVEAIWAGIKATEAAVSEEFGLAPFLPDQIHFVHSQELLSRYPDLDAKGRERAIAKDLGAVFLVGIGGKLSDGHRHDVRAPDYDDWSTPSELGHAGLNGDILVWNPVLEDAFELSSMGIRVDADTLKHQLALTGDEDRLELEWHQALLRGEMPQTIGGGIGQSRLTMLLLQLPHIGQVQAGVWPAAVRESVPSLL",
+        # >cath|current|132lA00/2-129
+        "VFGRCELAAAMRHGLDNYRGYSLGNWVCAAFESNFNTQATNRNTDGSTDYGILQINSRWWCNDGRTPGSRNLCNIPCSALLSSDITASVNCAKIVSDGNGMNAWVAWRNRCGTDVQAWIRGCRL",
+        # >cath|current|153lA00/1-185
+        "RTDCYGNVNRIDTTGASCKTAKPEGLSYCGVSASKKIAERDLQAMDRYKTIIKKVGEKLCVEPAVIAGIISRESHAGKVLKNGWGDRGNGFGLMQVDKRSHKPQGTWNGEVHITQGTTILINFIKTIQKKFPSWTKDQQLKGGISAYNAGAGNVRSYARMDIGTTHDDYANDVVARAQYYKQHGY",
+    ]
+
+    emb, mask = pipeline(sequences)

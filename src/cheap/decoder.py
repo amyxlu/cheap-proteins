@@ -1,14 +1,11 @@
+from pathlib import Path
+
 import torch.nn as nn
 import torch
-import lightning as L
-import typing as T
-from pathlib import Path
-import os
-
-from typing import Optional, Callable
+from torch.hub import load_state_dict_from_url
 
 from .esmfold import batch_encode_sequences
-from .constants import DECODER_CKPT_PATH
+from .constants import DECODER_CKPT_PATH, HF_HUB_PREFIX
 
 
 class FullyConnectedNetwork(nn.Module):
@@ -82,14 +79,18 @@ class FullyConnectedNetwork(nn.Module):
         return self.net(x)
 
     @classmethod
-    def from_pretrained(cls, device=None, ckpt_path=None, eval_mode=True):
-        if ckpt_path is None:
-            ckpt_path = DECODER_CKPT_PATH
+    def from_pretrained(cls, device=None, model_dir=None, eval_mode=True):
+        if model_dir is None:
+            model_dir = Path(DECODER_CKPT_PATH).parent
+
+        url = f"{HF_HUB_PREFIX}/sequence_decoder/mlp.ckpt"
+
+        # will load from cache if available, and otherwise downloads.
+        ckpt = load_state_dict_from_url(url, model_dir=model_dir, file_name="mlp.ckpt", progress=True, map_location=torch.device("cpu"))
 
         model = cls()
 
         # original model was trained/checkpointed with pytorch lightning
-        ckpt = torch.load(ckpt_path)
         model.load_state_dict(ckpt["state_dict"])
 
         if device is not None:

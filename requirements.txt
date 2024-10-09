@@ -32,3 +32,5 @@ git+https://github.com/webdataset/webdataset.git@5b12e0ba78bfb64741add2533c5d1e4
 # git clone github.com/amyxlu/openfold.git ~/openfold
 # cd ~/openfold
 # python setup.py develop
+
+# git+https://github.com/amyxlu/openfold.git --install-option="--no-deps"

@@ -44,6 +44,12 @@ cd openfold
 python setup.py develop
 ```
 
+To use the model for inference, several cached tensors are needed as well as the model. By default, the files will be downloaded to `~/.cache/cheap`. However, since these files can be large, you can override by setting the `CHEAP_CACHE` environment variable:
+
+```
+echo "export CHEAP_CACHE=/data/lux70/cheap" >> ~/.bashrc
+```
+
 ## Usage
 
 To obtain compressed representations of sequences (also see notebook example at `notebooks/usage_example.ipynb`):

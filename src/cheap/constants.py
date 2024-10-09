@@ -2,8 +2,14 @@ import os
 from pathlib import Path
 
 
-# DEFAULT_CACHE = Path(os.environ['HOME']) / f".cache/cheap"
-DEFAULT_CACHE = Path("/data/lux70/cheap")
+# defaults to ~/.cache/cheap, but can be overridden by setting the CHEAP_CACHE as an environment variable
+DEFAULT_CACHE = Path(os.environ.get("CHEAP_CACHE", Path.home() / ".cache/cheap"))
+
+if not DEFAULT_CACHE.exists():
+    DEFAULT_CACHE.mkdir(parents=True)
+
+
+HF_HUB_PREFIX = "https://huggingface.co/amyxlu/cheap-proteins/resolve/main"
 
 
 # Weights to trained latent-to-sequence decoder
