@@ -6,7 +6,6 @@ __pycache__
 .vscode
 .DS_Store
 
-*.csv
 *.out
 *.safetensors
 *.pth
