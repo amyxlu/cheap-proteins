@@ -4,8 +4,6 @@ import torch
 from torch import nn
 import numpy as np
 
-import schedulefree  # if using scheduler-free optimizer
-
 from . import HourglassDecoder, HourglassEncoder, VectorQuantizer, FiniteScalarQuantizer
 from ..utils import (
     LatentScaler,
@@ -278,24 +276,18 @@ class HourglassProteinCompressionTransformer(nn.Module):
         if not self.quantizer is None:
             parameters += list(self.quantizer.parameters())
 
-        if self.use_optimizer_free_scheduler:
-            # https://arxiv.org/abs/2405.15682
-            optimizer = schedulefree.AdamWScheduleFree(parameters, lr=self.lr)
-            return optimizer
-
-        else:
-            optimizer = torch.optim.AdamW(
-                parameters, lr=self.lr, betas=self.lr_adam_betas
-            )
-            scheduler = get_lr_scheduler(
-                optimizer=optimizer,
-                sched_type=self.lr_sched_type,
-                num_warmup_steps=self.lr_num_warmup_steps,
-                num_training_steps=self.lr_num_training_steps,
-                num_cycles=self.lr_num_cycles,
-            )
-            scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
-            return {"optimizer": optimizer, "lr_scheduler": scheduler}
+        optimizer = torch.optim.AdamW(
+            parameters, lr=self.lr, betas=self.lr_adam_betas
+        )
+        scheduler = get_lr_scheduler(
+            optimizer=optimizer,
+            sched_type=self.lr_sched_type,
+            num_warmup_steps=self.lr_num_warmup_steps,
+            num_training_steps=self.lr_num_training_steps,
+            num_cycles=self.lr_num_cycles,
+        )
+        scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
+        return {"optimizer": optimizer, "lr_scheduler": scheduler}
 
     def run_batch(self, batch, prefix="train"):
         """
