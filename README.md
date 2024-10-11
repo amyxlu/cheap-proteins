@@ -5,6 +5,18 @@ Code for [Tokenized and Continuous Embedding Compressions of Protein Sequence an
 ![Overview of the CHEAP model.](cheap.png)
 
 
+## Table of Contents
+
+1. [Demo](#demo)
+2. [Installation](#installation)
+    - [Caching weights and auxiliary tensors](#caching-weights-and-auxiliary-tensors)
+3. [Usage](#usage)
+    - [Example](#example)
+    - [Available Models](#available-models)
+4. [Configuration](#configuration)
+5. [Citation](#citation)
+
+
 ## Demo
 For a demo of reported results, including phenomena of massive activations in [ESMFold (Lin et al.)](https://www.science.org/doi/10.1126/science.ade2574), see `notebooks/cheap_example.ipynb`.
 
@@ -25,7 +37,7 @@ pip install -e .
 ```
 
 
->[! NOTE]
+>[!NOTE]
 >The ESMFold structure module use the OpenFold implementation, which includes custom CUDA kernels for the attention mechanism. Installing using the instructions here will automatically install an OpenFold [fork]() in no-dependency mode, which includes some minor changes to use C++17 instead of C++14 to build the CUDA kernels, for compatibility with `torch >= 2.0`.
 
 
@@ -36,7 +48,7 @@ To use the model for inference, several cached tensors are needed to normalize b
 echo "export CHEAP_CACHE=/data/lux70/cheap" >> ~/.bashrc
 ```
 
->[! NOTE]
+>[!NOTE]
 >Each checkpoint is around 1GB. If you intend to download all 17 models, it is recommended to set `CHEAP_CACHE` if your shared cluster is limited on home directory space.
 
 You can also change where files are downloaded by modifying the variables in `src/cheap/constants.py`.
