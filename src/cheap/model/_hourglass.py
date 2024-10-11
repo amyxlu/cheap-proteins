@@ -43,7 +43,6 @@ class HourglassProteinCompressionTransformer(nn.Module):
         lr_num_warmup_steps: int = 0,
         lr_num_training_steps: int = 10_000_000,
         lr_num_cycles: int = 1,
-        use_optimizer_free_scheduler: bool = False,
         # auxiliary losses
         seq_loss_weight: float = 0.0,
         struct_loss_weight: float = 0.0,
@@ -149,7 +148,6 @@ class HourglassProteinCompressionTransformer(nn.Module):
         self.lr_num_warmup_steps = lr_num_warmup_steps
         self.lr_num_training_steps = lr_num_training_steps
         self.lr_num_cycles = lr_num_cycles
-        self.use_optimizer_free_scheduler = use_optimizer_free_scheduler
 
         self.make_sequence_constructor = log_sequence_loss or (seq_loss_weight > 0.0)
         self.make_structure_constructor = log_structure_loss or (
