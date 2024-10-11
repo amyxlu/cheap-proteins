@@ -1,8 +1,12 @@
-root_dir: /data/lux70/data/plaid
-data_dir: /data/lux70/data
-log_dir: /homefs/home/lux70/storage/plaid/logs
-project_dir: /homefs/home/lux70/code/plaid
+##### replace these paths with paths from your machine: #####
+
+
+root_dir: /directory/where/artifacts/are/stored
+data_dir: /path/to/data/dir
+log_dir: /path/to/logs/dir
+project_dir: /path/to/project/code
 
 checkpoint_dir: ${paths.root_dir}/checkpoints
 artifacts_dir: ${paths.root_dir}/artifacts
-entity: lu-amy-al1
+
+entity: your-wandb-username-here

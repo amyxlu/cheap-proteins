@@ -14,6 +14,5 @@ dependencies:
   - pytorch-cuda=12.1
   - torchvision
   - bioconda::tmalign
-  - salilab::dssp
   - pip:
     - -r requirements.txt

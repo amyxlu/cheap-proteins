@@ -20,21 +20,14 @@ cd cheap-proteins
 To create the environment for the repository:
 ```
 conda env create --file environment.yaml
+pip install --no-deps git+https://github.com/amyxlu/openfold.git  # see note below
 pip install -e .
 ```
 
-**Important**: we use the frozen ESMFold structure module, which in turn uses the OpenFold implementation, and includes custom CUDA kernels for the attention mechanism. To trigger the build without the other OpenFold dependencies related to MSA construction, etc.:
 
-```
-# fork contains minor changes to setup.py to use C++17 instead of C++14
-# for newer versions of PyTorch
-git clone https://github.com/amyxlu/openfold.git
-# fork contains minor changes to setup.py to use C++17 instead of C++14
-# for newer versions of PyTorch
-git clone https://github.com/amyxlu/openfold.git
-cd openfold
-python setup.py develop
-```
+>[! NOTE]
+>The ESMFold structure module use the OpenFold implementation, which includes custom CUDA kernels for the attention mechanism. Installing using the instructions here will automatically install an OpenFold [fork]() in no-dependency mode, which includes some minor changes to use C++17 instead of C++14 to build the CUDA kernels, for compatibility with `torch >= 2.0`.
+
 
 ### Caching weights and auxiliary tensors
 To use the model for inference, several cached tensors are needed to normalize by channel and bypass massive activations explored in the paper. By default, the files will be downloaded to `~/.cache/cheap`. However, since these files can be large, you can override by setting the `CHEAP_CACHE` environment variable:
@@ -43,7 +36,10 @@ To use the model for inference, several cached tensors are needed to normalize b
 echo "export CHEAP_CACHE=/data/lux70/cheap" >> ~/.bashrc
 ```
 
-You can also change where files are downloaded by modifying the variables in `src/plaid/constants.py`.
+>[! NOTE]
+>Each checkpoint is around 1GB. If you intend to download all 17 models, it is recommended to set `CHEAP_CACHE` if your shared cluster is limited on home directory space.
+
+You can also change where files are downloaded by modifying the variables in `src/cheap/constants.py`.
 
 ## Usage
 
@@ -106,6 +102,12 @@ model = esmfold_v1_embed_only()  # does not include the structure module.
 
 We also make available a model trained on Pfam:
 * `CHEAP_pfam_shorten_2_dim_32()`
+
+
+### Configuration
+
+For more advanced usage, see the configurations in `configs`. We make use of [Hydra]() for flexible and modular configuration. Be sure to first set the paths in `configs/paths.yaml` to the corresponding paths on your machine.
+
 
 ## Citation
 
