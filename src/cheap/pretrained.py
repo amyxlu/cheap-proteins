@@ -38,6 +38,7 @@ def load_model_from_id(
     url = f"{HF_HUB_PREFIX}/checkpoints/{model_id}/last.ckpt"
     model_dir = Path(model_dir) / model_id
 
+    print(f"Using checkpoint at {str(model_dir)}.")
     ckpt = url_to_state_dict(url, model_dir)
 
     # initialize model based on saved hyperparameters
