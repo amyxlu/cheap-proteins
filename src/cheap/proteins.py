@@ -238,7 +238,7 @@ class LatentToSequence:
 
 
 class LatentToStructure:
-    def __init__(self, esmfold=None, chunk_size=128, delete_esm_lm=False):
+    def __init__(self, esmfold=None, chunk_size=128, delete_esm_lm=False, use_compile=False):
         if esmfold is None:
             esmfold = esmfold_v1()
 
@@ -251,7 +251,10 @@ class LatentToStructure:
         self.esmfold.eval()
         for param in self.esmfold.parameters():
             param.requires_grad = False
-
+        
+        if use_compile:
+            self.esmfold = torch.compile(self.esmfold)
+            
         self.device = get_model_device(self.esmfold)
 
     def to(self, device):
