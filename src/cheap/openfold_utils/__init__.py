@@ -1,5 +1,6 @@
 from ._protein import Protein as OFProtein
 from ._protein import from_pdb_string as protein_from_pdb_string
+from ._protein import to_pdb as protein_to_pdb
 from ._rigids import Rigid, Rotation
 from ._tensor_utils import (
     batched_gather,

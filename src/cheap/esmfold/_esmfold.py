@@ -17,9 +17,9 @@ import esm
 from esm import Alphabet
 from lightning.pytorch.utilities import rank_zero_info
 
-from openfold.data.data_transforms import make_atom14_masks
-from openfold.np import residue_constants
-from openfold.utils.loss import compute_predicted_aligned_error, compute_tm
+from ..openfold_utils._data_transforms import make_atom14_masks
+from ..openfold_utils._losses import compute_predicted_aligned_error, compute_tm
+from ..openfold_utils import _residue_constants as residue_constants
 
 # for all ESMFold specific imports, use local modules to allow for customization
 from ._categorical_mixture import categorical_lddt
